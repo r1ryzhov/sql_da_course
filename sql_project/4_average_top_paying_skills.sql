@@ -1,16 +1,18 @@
-select skills as skill,
-    round(avg(salary_year_avg), 0) as avg_salary_per_skill,
-    count(skills) as quantity_of_vacancies
-FROM
-    job_postings_fact
-    inner join skills_job_dim using(job_id)
-    inner join skills_dim using(skill_id)
-where
+SELECT 
+    skills AS skill,
+    ROUND(AVG(salary_year_avg), 0) AS avg_salary_per_skill,
+    COUNT(skills) AS quantity_of_vacancies
+FROM job_postings_fact
+INNER JOIN skills_job_dim 
+    USING (job_id)
+INNER JOIN skills_dim 
+    USING (skill_id)
+WHERE 
     job_title_short = 'Data Analyst'
-    and salary_year_avg is not null
-group by 1
-order by 2 desc
-limit 20;
+    AND salary_year_avg IS NOT NULL
+GROUP BY skills
+ORDER BY avg_salary_per_skill DESC
+LIMIT 20;
 
 /*
 Навыки с самой высокой средней зарплатой

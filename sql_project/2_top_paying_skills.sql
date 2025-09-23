@@ -1,25 +1,29 @@
-with top_paying_jobs as(
-    select job_id,
-        name as company_name,
+WITH top_paying_jobs AS (
+    SELECT 
+        job_id,
+        name AS company_name,
         job_title,
         salary_year_avg
-    from
-        job_postings_fact
-    left join company_dim using(company_id)
-    where
+    FROM job_postings_fact
+    LEFT JOIN company_dim 
+        USING (company_id)
+    WHERE 
         job_title_short = 'Data Analyst'
-        and job_location = 'Anywhere'
-        and salary_year_avg is not null
-    order by salary_year_avg desc
-    limit 15
+        AND job_location = 'Anywhere'
+        AND salary_year_avg IS NOT NULL
+    ORDER BY salary_year_avg DESC
+    LIMIT 15
 )
 
-select top_paying_jobs.*,
+SELECT 
+    top_paying_jobs.*,
     skills
-from top_paying_jobs
-INNER JOIN skills_job_dim using(job_id)
-inner join skills_dim using(skill_id)
-order by salary_year_avg desc;
+FROM top_paying_jobs
+INNER JOIN skills_job_dim 
+    USING (job_id)
+INNER JOIN skills_dim 
+    USING (skill_id)
+ORDER BY salary_year_avg DESC;
 
 /*
 Какие навыки чаще всего упоминаются в самых высокооплачиваемых вакансиях?
